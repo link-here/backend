@@ -1,4 +1,4 @@
-import {Link} from './lib/db';
+import {Link, AuthToken} from './lib/db';
 
 export interface APIResult<Response> {
   success: boolean;
@@ -15,4 +15,4 @@ export interface GetLinksResponse {
   hasMore: boolean;
 }
 
-export {Link};
+export {Link, AuthToken};
