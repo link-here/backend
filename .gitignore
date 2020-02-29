@@ -3,6 +3,7 @@ data
 
 # Compiled code
 dist
+dts
 
 # Playground
 dev.js

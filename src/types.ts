@@ -15,6 +15,4 @@ export interface GetLinksResponse {
   hasMore: boolean;
 }
 
-export interface TestResponse {
-  t: string;
-}
+export {Link};

@@ -1,7 +1,7 @@
 import {Path, Security, GET, POST, PUT, QueryParam, PathParam} from 'typescript-rest';
 import {save, capture} from '../lib/link';
 import {Link} from '../lib/db';
-import {APIResult, AddLinksResponse, GetLinksResponse} from '../interfaces';
+import {APIResult, AddLinksResponse, GetLinksResponse} from '../types';
 
 @Path('/api/v1/links')
 @Security('ROLE_USER')
