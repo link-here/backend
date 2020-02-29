@@ -9,6 +9,13 @@ export const save = async (url: string): Promise<Link> => {
 
 export const capture = async (l: Link): Promise<void> => {
   return captureWebsite.file(l.url, path.join(SCREENSHOTS_DIR, `${l.id}.png`), {
-    scaleFactor: 1
+    scaleFactor: 1,
+    beforeScreenshot: async page => {
+      const title = await page.title();
+
+      l.title = title;
+
+      await l.save();
+    }
   });
 };

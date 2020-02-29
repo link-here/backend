@@ -10,6 +10,8 @@ export const sequelize = new Sequelize({
 export class Link extends Model {
   public id!: number;
   public url!: string;
+  public hidden!: boolean;
+  public title!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -30,6 +32,13 @@ Link.init({
     primaryKey: true
   },
   url: {
+    type: new DataTypes.STRING(1000)
+  },
+  hidden: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  title: {
     type: new DataTypes.STRING(1000)
   }
 }, {

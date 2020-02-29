@@ -1,4 +1,4 @@
-import {Path, Security, GET, POST, QueryParam} from 'typescript-rest';
+import {Path, Security, GET, POST, PUT, QueryParam, PathParam} from 'typescript-rest';
 import {save, capture} from '../lib/link';
 import {Link} from '../lib/db';
 import {APIResult, AddLinksResponse, GetLinksResponse} from '../interfaces';
@@ -19,15 +19,38 @@ export default class {
   }
 
   @GET
-  async getLinks(@QueryParam("limit") limit = 10, @QueryParam('skip') skip = 0): Promise<APIResult<GetLinksResponse>> {
+  async getLinks(@QueryParam("limit") limit = 10, @QueryParam('skip') skip = 0, @QueryParam('hidden') hidden = false): Promise<APIResult<GetLinksResponse>> {
     // Get total # of links
     const n = await Link.count();
 
     // Get all links
-    const links = await Link.findAll({limit, offset: skip, order: [['createdAt', 'DESC']]});
+    let where = {hidden: false};
+
+    if (hidden) {
+      delete where.hidden;
+    }
+
+    const links = await Link.findAll({limit, offset: skip, order: [['createdAt', 'DESC']], where});
 
     const hasMore = skip + limit < n;
 
     return {success: true, result: {links, hasMore}, error: null};
+  }
+
+  @PUT
+  @Path('/:id')
+  async updateLink(@PathParam('id') id: number, req: Link): Promise<APIResult<Link|null>> {
+    // Get link
+    const link = await Link.findByPk(id);
+
+    if (!link) {
+      return {success: false, error: `id ${id} does not exist`, result: null};
+    }
+
+    Object.assign(link, req);
+
+    await link.save();
+
+    return {success: true, error: null, result: link};
   }
 }
