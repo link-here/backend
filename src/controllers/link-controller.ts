@@ -19,7 +19,7 @@ export default class {
   }
 
   @GET
-  async getLinks(@QueryParam("limit") limit = 10, @QueryParam('skip') skip = 0, @QueryParam('hidden') hidden = false): Promise<APIResult<GetLinksResponse>> {
+  async getLinks(@QueryParam("limit") limit: number = 10, @QueryParam('skip') skip: number = 0, @QueryParam('hidden') hidden: boolean = false): Promise<APIResult<GetLinksResponse>> {
     // Get total # of links
     const n = await Link.count();
 
