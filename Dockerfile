@@ -22,14 +22,6 @@ COPY . .
 
 RUN npm run build
 
-# Add user so we don't need --no-sandbox.
-RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
-    && mkdir -p /home/pptruser/Downloads \
-    && chown -R pptruser:pptruser /home/pptruser
-
-# Run everything after as non-privileged user.
-USER pptruser
-
 EXPOSE 3000
 
 # Define these right before start script, otherwise NPM ignores dev dependencies
