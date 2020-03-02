@@ -1,3 +1,3 @@
-import * as cryptoRandomString from 'crypto-random-string';
+import cryptoRandomString from 'crypto-random-string';
 
 export default (length = 32): string => cryptoRandomString({length});

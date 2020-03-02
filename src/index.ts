@@ -1,6 +1,6 @@
-import * as express from 'express';
-import * as cors from 'cors';
-import * as makeDir from 'make-dir';
+import express from 'express';
+import cors from 'cors';
+import makeDir from 'make-dir';
 import {Server} from 'typescript-rest';
 import {DATA_DIR, SCREENSHOTS_DIR, PORT} from './lib/config';
 import SimpleAuth from './lib/simple-auth';
