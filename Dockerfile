@@ -1,17 +1,19 @@
-FROM node:12
+FROM node:12-alpine
+
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PORT 3000
+ENV DATA_DIR /data
+ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
 WORKDIR /usr/src/app
 
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-    && apt-get update \
-    && apt-get install -y google-chrome-unstable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf \
-      --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
-
-ADD https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 /usr/local/bin/dumb-init
-RUN chmod +x /usr/local/bin/dumb-init
-ENTRYPOINT ["dumb-init", "--"]
+# Install Chromium
+RUN apk update && apk upgrade && \
+  echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
+  echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
+  apk add --no-cache \
+  chromium@edge \
+  nss@edge
 
 # Install actual application
 COPY package*.json ./
@@ -24,10 +26,8 @@ RUN npm run build
 
 EXPOSE 3000
 
-# Define these right before start script, otherwise NPM ignores dev dependencies
+# Define before start script, otherwise NPM ignores dev dependencies
 ENV NODE_ENV production
-ENV PORT 3000
-ENV DATA_DIR /data
 # Unfortunately, Chromium inside Docker has issues, even when running as a non-default user.
 ENV DISABLE_CHROMIUM_SANDBOX true
 

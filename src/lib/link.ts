@@ -1,7 +1,7 @@
 import path from 'path';
 import captureWebsite from 'capture-website';
 import {decode} from 'url-encode-decode';
-import {SCREENSHOTS_DIR, DISABLE_CHROMIUM_SANDBOX} from './config';
+import {SCREENSHOTS_DIR, DISABLE_CHROMIUM_SANDBOX, CHROMIUM_PATH} from './config';
 import {Link} from './db';
 
 export const save = async (url: string): Promise<Link> => {
@@ -17,12 +17,15 @@ export const save = async (url: string): Promise<Link> => {
 export const capture = async (l: Link): Promise<void> => {
   const launchOptions = {} as any;
 
-  // Unfortunately, Chromium inside Docker has issues, even when running as a non-default user.
   if (DISABLE_CHROMIUM_SANDBOX) {
     launchOptions.args = [
       '--no-sandbox',
       '--disable-setuid-sandbox'
     ];
+  }
+
+  if (CHROMIUM_PATH) {
+    launchOptions.executablePath = CHROMIUM_PATH;
   }
 
   return captureWebsite.file(l.url, path.join(SCREENSHOTS_DIR, `${l.id}.png`), {
