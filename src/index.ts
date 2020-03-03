@@ -1,5 +1,4 @@
 import express from 'express';
-import serveStatic from 'serve-static';
 import cors from 'cors';
 import makeDir from 'make-dir';
 import {Server} from 'typescript-rest';
@@ -21,12 +20,6 @@ Server.registerAuthenticator(new SimpleAuth());
 // Load services
 // Have to get .js so we don't try to import d.ts
 Server.loadServices(app, 'controllers/*.js', __dirname);
-
-// Add screenshots directory to server
-app.use('/api/v1/screenshots', serveStatic(SCREENSHOTS_DIR, {
-  immutable: true,
-  maxAge: 365 * 24 * 60 * 60 * 1000 // 1 year
-}));
 
 app.listen(PORT, async () => {
   // Create data directories if necessary
