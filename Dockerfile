@@ -28,5 +28,7 @@ EXPOSE 3000
 ENV NODE_ENV production
 ENV PORT 3000
 ENV DATA_DIR /data
+# Unfortunately, Chromium inside Docker has issues, even when running as a non-default user.
+ENV DISABLE_CHROMIUM_SANDBOX true
 
 CMD ["npm", "start"]
