@@ -45,3 +45,51 @@ services:
 ### Next steps
 
 On the first run, an authentication token will be generated and logged to the console.  Copy and paste it into the token field when setting up the extension.
+
+### Docs
+
+(Currently) **all** API requests require an authentication token to be included in the headers: `Authentication: Bearer ${token}`.
+
+All responses take the form of `{success: boolean, result: any, error: string | null}`.
+
+This package exports types, you can import them with `import {APIResult, Link, ...} from '@linkhere/backend'`.
+
+#### `/api/v1/links`
+
+**GET**
+
+Query parameters:
+
+- `limit`: number of links to return, default: `10`
+- `skip`: number of links to skip when querying, default: `0`
+- `hidden`: whether or not to return links marked as hidden, default: `false`
+
+Returns: `{links: Link[], hasMore: boolean}`.
+
+**POST**
+
+Body parameter: `{urls: string[]}`.
+
+Returns: `{links: Link[]}`.
+
+Note: may return before screenshots have been captured.
+
+**PUT**
+
+Path parameters:
+
+- `/:id`: `id` of link to update
+
+Body parameter: `Link`.
+
+Returns: `Link`.
+
+#### `/api/v1/screenshots`
+
+**GET**
+
+Path parameters:
+
+- `/:id`: `id` of link
+
+Returns: `Return.DownloadBinaryData`.
