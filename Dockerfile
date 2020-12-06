@@ -18,6 +18,9 @@ RUN apk update && apk upgrade && \
 # Install actual application
 COPY package*.json ./
 
+# https://github.com/typicode/husky/issues/822
+ENV HUSKY_SKIP_INSTALL true
+
 RUN npm install
 
 COPY . .
